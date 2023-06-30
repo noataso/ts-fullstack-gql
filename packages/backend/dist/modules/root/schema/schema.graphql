@@ -1,0 +1,46 @@
+#todo
+type Todo {
+  id: String!
+  title: String!
+  isCompleted: Boolean!
+  updatedAt: String!
+  createdAt: String!
+}
+#get-todo
+input GetTodoInput {
+  todoId: String!
+}
+type GetTodoResponse {
+  todo: Todo!
+}
+type Query {
+  getTodo(getTodo: GetTodoInput!): GetTodoResponse!
+}
+#get-todos
+type GetTodosResponse {
+  todos: [Todo]
+}
+type Query {
+  getTodos: GetTodosResponse
+}
+#remove-todo
+input RemoveTodoInput {
+  todoId: String!
+}
+type RemoveTodoResponse {
+  todo: Todo!
+}
+type Mutation {
+  removeTodo(removeTodoInput: RemoveTodoInput!): RemoveTodoResponse!
+}
+#update-todo
+input UpdateTodoInput {
+  title: String
+  isCompleted: Boolean
+}
+type UpdateTodoResponse {
+  todo: Todo!
+}
+type Mutation {
+  updateTodo(updateTodoInput: UpdateTodoInput!): UpdateTodoResponse!
+}

@@ -1,0 +1,11 @@
+input GetTodoInput {
+  todoId: String!
+}
+
+type GetTodoResponse {
+  todo: Todo!
+}
+
+type Query {
+  getTodo(getTodo: GetTodoInput!): GetTodoResponse!
+}

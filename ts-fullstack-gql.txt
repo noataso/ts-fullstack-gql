@@ -1,0 +1,198 @@
+ディレクトリ構造
+packages
+ frontend
+ backend
+package.json
+
+ターミナルを3つに分ける(root,frontend,backend)
+root
+
+backend
+cd packages/backend
+
+frontend
+cd packages/frontend
+
+
+root
+npm init -y
+
+
+package.json
+#packagesフォルダの中を管理する
+#rootターミナルの方でnpm iをすると、packages/frontendやpackages/backendの中にあるpackage.jsonもnpm iするように設定される
+#"dev:front":"npm run dev -w(workspacesの略) -frontend(package.jsonの`name`のセクションの値を参照)"
+"scripts":{
+  "dev:front":"npm run dev -w frontend"
+}
+"workspaces":[
+  "packages/*"
+]
+
+
+frontend
+npm create vite@latest . -- --template react-ts
+
+root
+#frontendターミナル(packages/frontendディレクトリの中のpackage.json)でもnpm iされる
+#npm run dev:frontでpackages/frontendのnpm run devと同じ
+#package.jsonの"dev:front":"npm run dev -w frontend"の記述のおかげ
+npm i
+npm run dev:front
+
+backend
+npm init -y
+npm install -DE typescript @types/node nodemon
+mkdir src
+touch src/index.ts
+npx tsc --init
+
+
+packages\backend\tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+  }
+}
+
+packages\backend\package.json
+"type":"module",
+"scripts":{
+  "dev":"nodemon dist/index.js",
+  "watch":"tsc --watch",
+  "build":"tsc",
+  "start":"node dist/index.js"
+}
+
+backend
+npm run watch #tsをjsに変換
+npm run dev #jsを実行
+
+package.json
+#rootプロジェクトからフロントエンドやバックエンドを実行できるようにする
+"scripts": {
+  "build":"npm run build:back && npm run build:front",
+  "build:back":"npm run build -w backend",
+  "build:front":"npm run build -w frontend",
+  "dev:back":"npm run dev -w backend",
+  "dev:watch":"npm run watch -w backend",
+  "dev:front":"npm run dev -w frontend"
+},
+
+
+eslintの導入
+backend
+#E:packageのバージョンの固定、D:devDependenciesの略
+npm i -ED eslint
+npx eslint --init
+選択肢
+真ん中(To check syntax and find problems)
+上(JavaScript modules (import/export))
+下(backendなので)
+Yes(Typescript使っているので)
+Node(Browserのチェック外して、Nodeのチェック付ける)
+Javascript
+Yes
+npm
+
+
+packages\backend\.eslintrc.cjs
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    tsconfigRootDir: __dirname,
+    project: ["tsconfig.eslint.json"],
+  },
+
+
+touch packages/backend/tsconfig.eslint.json
+
+
+packages\backend\tsconfig.eslint.json
+{
+    "extends":"./tsconfig.json",
+    "include": [".eslintrc.cjs","src/**/*"]
+}
+
+packages\backend\package.json
+"scripts":{
+  "dev":"nodemon dist/index.js",
+  "watch":"tsc --watch",
+  "build":"tsc",
+  "start":"node dist/index.js",
+  "lint":"eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\""
+}
+
+backend
+#eslint的によくないところを探す
+npm run lint
+
+frontend
+npm i -ED eslint
+npx eslint --init
+選択肢
+真ん中(To check syntax and find problems)
+上(JavaScript modules (import/export))
+React(Reactの雛形使っているので)
+Yes(Typescript使っているので)
+Browser
+Javascript
+Yes
+npm
+
+frontend
+npm i -ED eslint-plugin-react-hooks
+
+
+packages\frontend\.eslintrc.cjs
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    tsconfigRootDir: __dirname,
+    project: ["tsconfig.eslint.json"],
+  },
+
+
+frontend
+touch tsconfig.eslint.json
+
+
+packages\frontend\tsconfig.eslint.json
+{
+    "extends":"./tsconfig.json",
+    "include": [".eslintrc.cjs","src/**/*"]
+}
+
+
+packages\frontend\src\App.tsx
+#reactからReactをインポートする
+#aタグにrel="noreferrer"を入れる
+import React, { useState } from 'react'
+<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
+<a href="https://react.dev" target="_blank" rel="noreferrer">
+
+
+backend
+npm i express graphql @apollo/server
+npm i -DE @types/express
+
+

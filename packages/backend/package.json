@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon dist/index.js",
+    "watch": "npm run cpgql && tsc --watch",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
+    "gen:gql": "graphql-codegen --config codegen.yml",
+    "gen:db": "prisma migrate dev --name",
+    "gui:db": "prisma studio",
+    "cpgql": "copyfiles -u 1 src/**/*.graphql ./dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphql-codegen/cli": "4.0.0",
+    "@graphql-codegen/typescript": "4.0.0",
+    "@graphql-codegen/typescript-resolvers": "4.0.0",
+    "@types/cors": "2.8.13",
+    "@types/express": "4.17.17",
+    "@types/glob": "8.0.0",
+    "@types/node": "18.11.17",
+    "@typescript-eslint/eslint-plugin": "5.59.7",
+    "@typescript-eslint/parser": "5.59.7",
+    "copyfiles": "2.4.1",
+    "eslint": "8.41.0",
+    "nodemon": "2.0.22",
+    "typescript": "4.9.4"
+  },
+  "dependencies": {
+    "@apollo/server": "4.7.1",
+    "@prisma/client": "4.14.1",
+    "cors": "2.8.5",
+    "express": "4.18.2",
+    "glob": "8.0.3",
+    "graphql": "16.6.0",
+    "graphql-scalars": "1.22.0",
+    "prisma": "4.14.1"
+  }
+}
